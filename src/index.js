@@ -32,6 +32,8 @@ async function handleRequest(event) {
       finalResponse = new Response("Hello World from the edge!", { status: 200 });
     } else if (url.pathname === "/weather" && req.method === "GET") {
       finalResponse = await weatherHandler(req, event.client);
+    } else if (url.pathname === "/api/usuarios-activos" && req.method === "GET") {
+      finalResponse = usuariosActivosMock();
     } else {
       finalResponse = response.notFound();
     }
@@ -46,3 +48,25 @@ async function handleRequest(event) {
   return finalResponse;
 }
 
+// Datos de ejemplo para el mapa (mientras no tengamos los datos reales de AEP)
+function usuariosActivosMock() {
+  const body = {
+    updated_at: new Date().toISOString(),
+    data: [
+      { country: "ES", active_users: 2256 },
+      { country: "US", active_users: 1166 },
+      { country: "CN", active_users: 995 },
+      { country: "DE", active_users: 863 },
+      { country: "NL", active_users: 636 },
+    ],
+  };
+
+  return new Response(JSON.stringify(body), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "max-age=600",
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
+}

@@ -14,5 +14,8 @@
   "overrides": {
     "esbuild": ">=0.28.1",
     "@bytecodealliance/weval": "^0.5.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }
