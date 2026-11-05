@@ -33,7 +33,7 @@ async function handleRequest(event) {
     } else if (url.pathname === "/weather" && req.method === "GET") {
       finalResponse = await weatherHandler(req, event.client);
     } else if (url.pathname === "/api/usuarios-activos" && req.method === "GET") {
-      finalResponse = usuariosActivosMock();
+      finalResponse = usuariosActivos();
     } else {
       finalResponse = response.notFound();
     }
@@ -48,9 +48,22 @@ async function handleRequest(event) {
   return finalResponse;
 }
 
-// Datos de ejemplo para el mapa (mientras no tengamos los datos reales de AEP)
+// Datos reales generados por mapa-aep-test. Están fuera de git, así que pueden no existir:
+// esbuild incluye el JSON en el build si está y, dentro de un try, no falla si falta.
+// Un `import` estático rompería el build al clonar el proyecto.
+function cargarDatosReales() {
+  try {
+    return require("./data/usuarios-activos.json");
+  } catch {
+    return null;
+  }
+}
+
+const datosReales = cargarDatosReales();
+
+// Datos de ejemplo para el mapa (si no hay datos reales de AEP)
 function usuariosActivosMock() {
-  const body = {
+  return {
     updated_at: new Date().toISOString(),
     data: [
       { country: "ES", active_users: 2256 },
@@ -60,6 +73,10 @@ function usuariosActivosMock() {
       { country: "NL", active_users: 636 },
     ],
   };
+}
+
+function usuariosActivos() {
+  const body = datosReales ?? usuariosActivosMock();
 
   return new Response(JSON.stringify(body), {
     status: 200,

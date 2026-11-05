@@ -148,3 +148,6 @@ dist
 /node_modules
 /bin
 /pkg
+
+# Datos reales del cliente (los genera mapa-aep-test)
+src/data/
