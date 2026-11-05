@@ -47,6 +47,8 @@ function conTimeout(promise, ms) {
 function usuariosActivosMock() {
   return {
     updated_at: new Date().toISOString(),
+    // Permite al bloque no sustituir datos reales ya pintados por estos.
+    sample: true,
     data: [
       { country: "ES", active_users: 2256 },
       { country: "US", active_users: 1166 },
